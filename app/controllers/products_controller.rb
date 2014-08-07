@@ -9,8 +9,8 @@ class ProductsController < ApplicationController
 
   def create
     product = Product.new(product_params)
+    product.title = product.get_title(product.asin)
     if product.save
-      product.add_amazon_attributes!(product.asin)
       redirect_to root_url
     else
       #error messages
