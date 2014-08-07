@@ -2,6 +2,6 @@
 <%= link_to "Track a new product", new_product_path %>
 <ul>
   <% @products.each do |product| %>
-    <li><%= product.title %></li>
+    <li><%= product.title %>: <%= product.initial_price %></li>
   <% end %>
 </ul>

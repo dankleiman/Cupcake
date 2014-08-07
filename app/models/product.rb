@@ -16,17 +16,27 @@ class Product < ActiveRecord::Base
   binding.pry
   end
 
-  def self.amazon_item(asin)
-    book_asin = '0262062666'
-    tv_asin = 'B00BB0ZTMM'
-    pots_asin = 'B005J1R22O'
+  def add_amazon_attributes!(asin)
+    #####################################################
+    # NEED TO SAVE ATTRIBUTES TO PRODUCT IN THIS METHOD #
+    #####################################################
     req = Vacuum.new
     req.associate_tag = ENV['ASSOCIATE_TAG']
     res = req.item_lookup(query: { 'IdType' => 'ASIN', 'ItemId' => asin, 'ResponseGroup' => 'Large'})
     product_details = res.to_h
-    offer_listing = product_details["ItemLookupResponse"]["Items"]["Item"]["Offers"]["Offer"]["OfferListing"]
-    offer_summary = product_details["ItemLookupResponse"]["Items"]["Item"]["OfferSummary"]
-    title = product_details["ItemLookupResponse"]["Items"]["Item"]["ItemAttributes"]["Title"]
-    binding.pry
+    self.offer_listing = product_details["ItemLookupResponse"]["Items"]["Item"]["Offers"]["Offer"]["OfferListing"]
+    self.offer_summary = product_details["ItemLookupResponse"]["Items"]["Item"]["OfferSummary"]
+    self.title = product_details["ItemLookupResponse"]["Items"]["Item"]["ItemAttributes"]["Title"]
+  end
+
+  def initial_price
+    offer_summary.to_h["LowestNewPrice"]["FormattedPrice"]
+  end
+
+  def current_price
+    req = Vacuum.new
+    req.associate_tag = ENV['ASSOCIATE_TAG']
+    res = req.item_lookup(query: { 'IdType' => 'ASIN', 'ItemId' => self.asin, 'ResponseGroup' => 'Large'})
+    res.to_h["ItemLookupResponse"]["Items"]["Item"]["OfferSummary"]["LowestNewPrice"]["FormattedPrice"]
   end
 end

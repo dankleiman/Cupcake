@@ -1,6 +1,6 @@
 <h1>Track a New Product</h1>
 
 <%= simple_form_for @product do |f| %>
-  <%= f.input :asin %>
+  <%= f.input :asin, label: 'ASIN: ' %>
   <%= f.button :submit %>
 <% end %>
