@@ -1,5 +1,11 @@
 class ProductsController < ApplicationController
   def index
-    @products = Product.amazon_search
+    @products = Product.all
   end
+
+  def new
+    @product = Product.new
+  end
+
+
 end

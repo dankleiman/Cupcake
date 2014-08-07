@@ -38,4 +38,5 @@ group :test, :development do
 end
 
 gem 'vacuum'
+gem 'simple_form'
 
